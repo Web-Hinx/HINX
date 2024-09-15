@@ -419,7 +419,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     
     const formData = { fullName, email, phone, company, message };
 
-    fetch('/api/send-email', {  // Changed URL to match Vercel API route
+    fetch('https://hinx.vercel.app/api/send-email', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
