@@ -419,23 +419,22 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     
     const formData = { fullName, email, phone, company, message };
 
-    fetch('https://hinx.vercel.app/send-email', { 
+    fetch('/api/send-email', {  // Changed URL to match Vercel API route
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
     })
-    
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.text(); 
+      return response.json();  // Changed to .json() to match API response
     })
     .then(data => {
       console.log('Server response:', data);  
-      responseMessage.textContent = data;
+      responseMessage.textContent = data.message;  // Updated to match API response
       responseMessage.style.color = '#28a745';
       document.getElementById('contact-form').reset();
     })
@@ -445,7 +444,6 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       responseMessage.style.color = '#d9534f';
     });
 
-    
     setTimeout(() => {
       formContainer.removeChild(responseMessage);
     }, 3000);  
