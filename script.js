@@ -470,7 +470,13 @@ function validateContactEmail(email) {
 }
 
 function validatePhone(phone) {
-  const re = /^[
+  const re = /^[\d\s\+\-()]+$/;
+  return re.test(phone);
+}
+
+function validateMessage(message) {
+  return message.trim() !== '';
+}
 
 document.getElementById('newsletter-form').addEventListener('submit', function(event) {
   event.preventDefault();
