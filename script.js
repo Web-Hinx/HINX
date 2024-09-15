@@ -419,15 +419,15 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     
     const formData = { fullName, email, phone, company, message };
 
-    fetch('https://hinx.vercel.app/send-email', { 
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    
-    .then(response => {
+   fetch('https://hinx.vercel.app/api/send-email', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formData)
+})
+
+  .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
