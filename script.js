@@ -418,7 +418,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   if (validateFullName(fullName) && validateContactEmail(email) && validatePhone(phone) && validateMessage(message)) {
     const formData = { fullName, email, phone, company, message };
 
-    fetch('https://hinx.vercel.app/api/send-email', { 
+    fetch('https://github.com/Web-Hinx/hinx/blob/main/api/send-email.js', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
