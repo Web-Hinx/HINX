@@ -1,43 +1,74 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import nodemailer from 'nodemailer';
+import cors from 'cors';
+import { config } from 'dotenv';
+
+config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-app.post('https://hinx.vercel.app/api/send-email.js', (req, res) => {
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  service: 'hotmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Email options creation
+const createMailOptions = (fullName, email, phone, company, message) => {
+  return {
+    ownerMailOptions: {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: 'New Contact Form Submission',
+      text: `You have a new message from ${fullName} (${email}):
+      Phone: ${phone}
+      Company: ${company}
+      Message: ${message}`
+    },
+    userMailOptions: {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Thank you for contacting us!',
+      text: `Dear ${fullName},
+
+      Thank you for reaching out to us. We have received your message and will get back to you within the next working day or two.
+
+      Best regards,`
+    }
+  };
+};
+
+// POST endpoint for sending emails
+app.post('/send-email', async (req, res) => {
   const { fullName, email, phone, company, message } = req.body;
 
   if (!fullName || !email || !phone || !message) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'hotmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  });
+  const { ownerMailOptions, userMailOptions } = createMailOptions(fullName, email, phone, company, message);
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_USER,
-    subject: 'New Contact Form Submission',
-    text: `Name: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nCompany: ${company}\nMessage: ${message}`
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-      return res.status(500).json({ message: 'Failed to send email.' });
-    }
-    res.json({ message: 'Email sent successfully!' });
-  });
+  try {
+    await transporter.sendMail(ownerMailOptions);
+    await transporter.sendMail(userMailOptions);
+    res.status(200).json({ message: 'Emails sent successfully!' });
+  } catch (error) {
+    console.error('Error occurred:', error);
+    res.status(500).json({ message: 'Error sending emails', error: error.message });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
