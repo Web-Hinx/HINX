@@ -4,11 +4,13 @@
   "description": "Contact form with email sending functionality",
   "scripts": {
     "start": "node server.js",
-    "vercel-build": "echo 'No build steps required'"
+    "build": "echo 'No build steps required'",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
   }
 }
-
