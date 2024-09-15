@@ -416,7 +416,6 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   formContainer.appendChild(responseMessage);
 
   if (validateFullName(fullName) && validateContactEmail(email) && validatePhone(phone) && validateMessage(message)) {
-    
     const formData = { fullName, email, phone, company, message };
 
     fetch('https://hinx.vercel.app/api/send-email', { 
@@ -430,26 +429,31 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json();  // Changed to .json() to match API response
+      return response.json();
     })
     .then(data => {
-      console.log('Server response:', data);  
-      responseMessage.textContent = data.message;  // Updated to match API response
+      responseMessage.textContent = data.message;
       responseMessage.style.color = '#28a745';
       document.getElementById('contact-form').reset();
+      setTimeout(() => {
+        formContainer.removeChild(responseMessage);
+      }, 3000);
     })
     .catch(error => {
-      console.error('Error during fetch:', error);  
+      console.error('Error during fetch:', error);
       responseMessage.textContent = 'Error: Unable to send the message.';
       responseMessage.style.color = '#d9534f';
+      setTimeout(() => {
+        formContainer.removeChild(responseMessage);
+      }, 3000);
     });
 
-    setTimeout(() => {
-      formContainer.removeChild(responseMessage);
-    }, 3000);  
   } else {
     responseMessage.textContent = 'Please fill out all required fields correctly.';
     responseMessage.style.color = '#d9534f';
+    setTimeout(() => {
+      formContainer.removeChild(responseMessage);
+    }, 3000);
   }
 });
 
@@ -470,6 +474,7 @@ function validatePhone(phone) {
 function validateMessage(message) {
   return message.trim() !== '';
 }
+
 
 document.getElementById('newsletter-form').addEventListener('submit', function(event) {
   event.preventDefault();
