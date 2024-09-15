@@ -4,7 +4,6 @@
   "description": "Contact form with email sending functionality",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'No build steps required'",
     "vercel-build": "npm run build"
   },
   "dependencies": {
