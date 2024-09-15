@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import nodemailer from 'nodemailer';
 import cors from 'cors';
 import { config } from 'dotenv';
+import sendEmail from './api/send-email.js';
 
 config();
 
@@ -12,64 +12,15 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files if needed
 app.use(express.static('public'));
 
-// Nodemailer transporter setup
-const transporter = nodemailer.createTransport({
-  service: 'hotmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-// Email options creation
-const createMailOptions = (fullName, email, phone, company, message) => {
-  return {
-    ownerMailOptions: {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: 'New Contact Form Submission',
-      text: `You have a new message from ${fullName} (${email}):
-      Phone: ${phone}
-      Company: ${company}
-      Message: ${message}`
-    },
-    userMailOptions: {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Thank you for contacting us!',
-      text: `Dear ${fullName},
-
-      Thank you for reaching out to us. We have received your message and will get back to you within the next working day or two.
-
-      Best regards,`
-    }
-  };
-};
-
 // POST endpoint for sending emails
-app.post('https://hinx.vercel.app/api/send-email', async (req, res) => {
-  const { fullName, email, phone, company, message } = req.body;
+app.post('/api/send-email', sendEmail);
 
-  if (!fullName || !email || !phone || !message) {
-    return res.status(400).json({ message: 'All fields are required.' });
-  }
-
-  const { ownerMailOptions, userMailOptions } = createMailOptions(fullName, email, phone, company, message);
-
-  try {
-    await transporter.sendMail(ownerMailOptions);
-    await transporter.sendMail(userMailOptions);
-    res.status(200).json({ message: 'Emails sent successfully!' });
-  } catch (error) {
-    console.error('Error occurred while sending email:', error);
-    res.status(500).json({ message: 'Error sending emails', error: error.message });
-  }
-});
-
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 
