@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';  // Updated import statement
-import { config } from 'dotenv';  // Updated import statement
+import nodemailer from 'nodemailer';
+import { config } from 'dotenv';
 
-config();  // Initialize dotenv
+config();
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -40,10 +40,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    // Send email to the owner
     await transporter.sendMail(ownerMailOptions);
-    
-    // Send confirmation email to the user
     await transporter.sendMail(userMailOptions);
 
     res.status(200).json({ message: 'Emails sent successfully!' });
@@ -52,4 +49,3 @@ export default async function handler(req, res) {
     res.status(500).json({ message: 'Error sending emails', error: error.message });
   }
 }
-
