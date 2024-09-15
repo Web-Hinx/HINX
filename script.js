@@ -403,6 +403,7 @@ function handleScroll() {
 window.addEventListener('scroll', handleScroll);
 document.addEventListener('DOMContentLoaded', handleScroll);
 
+
 document.getElementById('contact-form').addEventListener('submit', function(event) {
   event.preventDefault();
 
@@ -418,7 +419,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   if (validateFullName(fullName) && validateContactEmail(email) && validatePhone(phone) && validateMessage(message)) {
     const formData = { fullName, email, phone, company, message };
 
-    fetch(' https://hinx.vercel.app/api/send-email', { 
+    fetch('https://hinx.vercel.app/api/send-email', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -469,14 +470,7 @@ function validateContactEmail(email) {
 }
 
 function validatePhone(phone) {
-  const re = /^[\d\s\+\-()]+$/;
-  return re.test(phone);
-}
-
-function validateMessage(message) {
-  return message.trim() !== '';
-}
-
+  const re = /^[
 
 document.getElementById('newsletter-form').addEventListener('submit', function(event) {
   event.preventDefault();
