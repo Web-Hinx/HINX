@@ -63,7 +63,7 @@ app.post('/api/send-email', async (req, res) => {
     await transporter.sendMail(userMailOptions);
     res.status(200).json({ message: 'Emails sent successfully!' });
   } catch (error) {
-    console.error('Error occurred:', error);
+    console.error('Error occurred while sending email:', error);
     res.status(500).json({ message: 'Error sending emails', error: error.message });
   }
 });
@@ -72,3 +72,4 @@ app.post('/api/send-email', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
