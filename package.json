@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Contact form with email sending functionality",
   "scripts": {
+    "start": "node server.js",
     "vercel-build": "echo 'No build steps required'"
   },
   "dependencies": {
@@ -10,3 +11,4 @@
     "nodemailer": "^6.9.15"
   }
 }
+
