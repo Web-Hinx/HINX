@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // API route for sending email
-app.post('/api/send-email', sendEmail);
+app.post('./api/send-email', sendEmail);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
