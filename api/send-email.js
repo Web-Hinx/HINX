@@ -10,6 +10,10 @@ export default async function handler(req, res) {
 
   const { fullName, email, phone, company, message } = req.body;
 
+  if (!fullName || !email || !phone || !message) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
   const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
@@ -42,7 +46,6 @@ export default async function handler(req, res) {
   try {
     await transporter.sendMail(ownerMailOptions);
     await transporter.sendMail(userMailOptions);
-
     res.status(200).json({ message: 'Emails sent successfully!' });
   } catch (error) {
     console.error('Error occurred:', error);
