@@ -7,7 +7,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.post('/api/send-email', (req, res) => {
+app.post('https://github.com/Web-Hinx/hinx/blob/main/api/send-email.js', (req, res) => {
   const { fullName, email, phone, company, message } = req.body;
 
   if (!fullName || !email || !phone || !message) {
