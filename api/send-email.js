@@ -49,9 +49,10 @@ const sendEmail = async (req, res) => {
     await transporter.sendMail(userMailOptions);
     res.status(200).json({ message: 'Emails sent successfully!' });
   } catch (error) {
-    console.error('Error occurred while sending email:', error);
-    res.status(500).json({ message: 'Error sending emails', error: error.message });
+    console.error('Error occurred while sending email:', error.stack);  // log full error
+    res.status(500).json({ message: 'Error sending emails', error: error.stack });
   }
 };
 
 export default sendEmail;
+
