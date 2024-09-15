@@ -403,7 +403,7 @@ function handleScroll() {
 window.addEventListener('scroll', handleScroll);
 document.addEventListener('DOMContentLoaded', handleScroll);
 
-document.getElementById('contact-form').addEventListener('submit', async function(event) {
+document.getElementById('contact-form').addEventListener('submit', function(event) {
   event.preventDefault();
 
   const fullName = document.getElementById('full-name').value;
@@ -418,35 +418,37 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   if (validateFullName(fullName) && validateContactEmail(email) && validatePhone(phone) && validateMessage(message)) {
     const formData = { fullName, email, phone, company, message };
 
-    try {
-      const response = await fetch('https://hinx.vercel.app/api/send-email', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
+    fetch('https://hinx.vercel.app/api/send-email', { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        return response.text().then(errorText => {
+          throw new Error(`HTTP error! status: ${response.status}, ${errorText}`);
+        });
       }
-
-      const data = await response.json();
+      return response.json();
+    })
+    .then(data => {
       responseMessage.textContent = data.message;
       responseMessage.style.color = '#28a745';
       document.getElementById('contact-form').reset();
       setTimeout(() => {
         formContainer.removeChild(responseMessage);
       }, 3000);
-
-    } catch (error) {
+    })
+    .catch(error => {
       console.error('Error during fetch:', error);
       responseMessage.textContent = 'Error: Unable to send the message.';
       responseMessage.style.color = '#d9534f';
       setTimeout(() => {
         formContainer.removeChild(responseMessage);
       }, 3000);
-    }
+    });
 
   } else {
     responseMessage.textContent = 'Please fill out all required fields correctly.';
@@ -474,7 +476,6 @@ function validatePhone(phone) {
 function validateMessage(message) {
   return message.trim() !== '';
 }
-
 
 
 document.getElementById('newsletter-form').addEventListener('submit', function(event) {
