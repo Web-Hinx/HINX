@@ -5,12 +5,14 @@ config();
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    console.log('Invalid request method:', req.method);
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   const { fullName, email, phone, company, message } = req.body;
 
   if (!fullName || !email || !phone || !message) {
+    console.log('Missing required fields:', { fullName, email, phone, company, message });
     return res.status(400).json({ message: 'All fields are required.' });
   }
 
@@ -46,6 +48,7 @@ export default async function handler(req, res) {
   try {
     await transporter.sendMail(ownerMailOptions);
     await transporter.sendMail(userMailOptions);
+    console.log('Emails sent successfully');
     res.status(200).json({ message: 'Emails sent successfully!' });
   } catch (error) {
     console.error('Error occurred:', error);
