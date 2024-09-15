@@ -49,7 +49,7 @@ const createMailOptions = (fullName, email, phone, company, message) => {
 };
 
 // POST endpoint for sending emails
-app.post('/send-email', async (req, res) => {
+app.post('/api/send-email', async (req, res) => {
   const { fullName, email, phone, company, message } = req.body;
 
   if (!fullName || !email || !phone || !message) {
