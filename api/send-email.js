@@ -4,7 +4,9 @@ import { config } from 'dotenv';
 config();
 
 const transporter = nodemailer.createTransport({
-  service: 'hotmail',
+  host: 'smtp.office365.com',
+  port: 587,
+  secure: false, // use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -49,10 +51,9 @@ const sendEmail = async (req, res) => {
     await transporter.sendMail(userMailOptions);
     res.status(200).json({ message: 'Emails sent successfully!' });
   } catch (error) {
-    console.error('Error occurred while sending email:', error.stack);  // log full error
+    console.error('Error occurred while sending email:', error.stack);
     res.status(500).json({ message: 'Error sending emails', error: error.stack });
   }
 };
 
 export default sendEmail;
-
