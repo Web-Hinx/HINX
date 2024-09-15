@@ -1,5 +1,7 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import nodemailer from 'nodemailer';  // Updated import statement
+import { config } from 'dotenv';  // Updated import statement
+
+config();  // Initialize dotenv
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -50,3 +52,4 @@ export default async function handler(req, res) {
     res.status(500).json({ message: 'Error sending emails', error: error.message });
   }
 }
+
