@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // POST endpoint for sending emails
-app.post('/api/send-email', sendEmail);
+app.post(' https://hinx.vercel.app/api/send-email', sendEmail);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
